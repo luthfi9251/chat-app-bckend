@@ -20,7 +20,7 @@ const authenticate = require('./middleware/authenticate.js')
 const httpServer = createServer(app)
 socketServer(httpServer)
 
-const PORT = process.env.PORT
+const PORT = process.env.PORT || 8080
 const URI = process.env.MONGO_URI
 
 mongoose.connect(URI, { useNewUrlParser: true, useUnifiedTopology: true })

@@ -7,8 +7,13 @@ const getAllUserAddFriend = require('../database/getAllUserAddFriend')
 const getAllPendingUser = require('../database/getAllPendingUser')
 const getConversationId = require('../database/getConversationId')
 const getAllFriends = require('../database/getAllFriends')
+const os = require("os")
 const express = require('express')
+const multer = require('multer')
+const storage = multer.diskStorage({})
+const upload = multer({ storage: storage })
 const router = express.Router()
+const { cloudinary } = require("../config/cloudinary")
 
 router.get('/getuser',(req,res)=>{
     let id = req.user._id
@@ -195,6 +200,39 @@ router.post('/deletefriend',(req,res)=>{
             
             })
         })
+})
+
+router.post("/updateprofile",upload.single('image'), async (req,res) => {
+    // console.log(req.user)
+    let profilePicture = req.user.profilePicture
+
+    if(req.file){
+        let resCloudinary = await cloudinary.uploader.upload(req.file.path,{ folder: "profilepicture/", width: 720, height: 720, crop: "fill" })
+        profilePicture = resCloudinary.url
+    }
+    User.findByIdAndUpdate(req.user._id,{ 
+        name: req.body.name,
+        username: req.body.username,
+        email: req.body.email,
+        profilePicture
+    })
+        .then(result => {
+            console.log("success update")
+            console.log(res)
+            res.status(200).json({
+                success: true,
+                msg: "success update profile"
+            })
+        })
+        .catch(err => {
+            console.log(err)
+             res.status(400).json({
+                success: false,
+                msg: "failed update profile"
+            })
+        })
+
+    
 })
 
 
