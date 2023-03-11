@@ -2,8 +2,8 @@ let GoogleStrategy = require('passport-google-oauth20').Strategy;
 let passport = require('passport')
 let User = require('../models/user')
 
-let GOOGLE_CLIENT_ID = '492930706196-i0rsnu8ma0kr0jhfokpdk6i25ln0ks79.apps.googleusercontent.com'
-let GOOGLE_CLIENT_SECRET = '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'
+let GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID
+let GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET
 
 function createUsername(string){
     let temp = string.toLowerCase().split(" ").join("") + Math.floor(Math.random()*1000)
@@ -20,7 +20,7 @@ function insertDatabase(object){
 passport.use(new GoogleStrategy({
     clientID: GOOGLE_CLIENT_ID,
     clientSecret: GOOGLE_CLIENT_SECRET,
-    callbackURL: "http://localhost:4000/auth/redirect/google"
+    callbackURL: process.env.GOOGLE_REDIRECT_URI
   },
   function(accessToken, refreshToken, profile, done) {
     let dataProfile = {
