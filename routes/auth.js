@@ -5,7 +5,7 @@ const router = express.Router()
 router.get('/google',passport.authenticate('google', { scope: ['profile','email'] }))
 
 router.get('/redirect/google',passport.authenticate('google', {
-    successRedirect: "http://localhost:5173/chat",
+    successRedirect: "/chat",
     failureRedirect: '/auth/redirect/failed' //please fix this later
 }));
 

@@ -20,7 +20,7 @@ function insertDatabase(object){
 passport.use(new GoogleStrategy({
     clientID: GOOGLE_CLIENT_ID,
     clientSecret: GOOGLE_CLIENT_SECRET,
-    callbackURL: process.env.GOOGLE_REDIRECT_URI
+    callbackURL: process.env.GOOGLE_REDIRECT_URI //jangan lupa ganti redirect uri nya
   },
   function(accessToken, refreshToken, profile, done) {
     let dataProfile = {
@@ -37,7 +37,7 @@ passport.use(new GoogleStrategy({
         if(!data){
             User.create(dataProfile, (err, res)=>{
                 if(err) return console.log(err)
-                console.log(res)
+                // console.log(res)
                 done(null,res)
             })
             return
@@ -52,5 +52,7 @@ passport.serializeUser((user,done)=>{
 })
 
 passport.deserializeUser((user,done)=>{
+  console.log("ini deserialize user")
+  console.log(user)
   done(null,user)
 })
